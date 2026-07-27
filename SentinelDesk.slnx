@@ -1,0 +1,15 @@
+<Solution>
+  <Folder Name="/src/">
+    <Project Path="src/SentinelDesk.Contracts/SentinelDesk.Contracts.csproj" />
+  </Folder>
+  <Folder Name="/src/SentinelDesk.Core/">
+    <Project Path="src/SentinelDesk.Core/SentinelDesk.Core.Api/SentinelDesk.Core.Api.csproj" />
+    <Project Path="src/SentinelDesk.Core/SentinelDesk.Core.Domain/SentinelDesk.Core.Domain.csproj" />
+    <Project Path="src/SentinelDesk.Core/SentinelDesk.Core.Infrastructure/SentinelDesk.Core.Infrastructure.csproj" />
+  </Folder>
+  <Folder Name="/src/SentinelDesk.Detection/">
+    <Project Path="src/SentinelDesk.Detection/SentinelDesk.Detection.Api/SentinelDesk.Detection.Api.csproj" />
+    <Project Path="src/SentinelDesk.Detection/SentinelDesk.Detection.Domain/SentinelDesk.Detection.Domain.csproj" />
+    <Project Path="src/SentinelDesk.Detection/SentinelDesk.Detection.Infrastructure/SentinelDesk.Detection.Infrastructure.csproj" />
+  </Folder>
+</Solution>

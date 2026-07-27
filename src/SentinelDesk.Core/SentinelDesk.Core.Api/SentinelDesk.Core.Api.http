@@ -1,0 +1,6 @@
+@SentinelDesk.Core.Api_HostAddress = http://localhost:5113
+
+GET {{SentinelDesk.Core.Api_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
