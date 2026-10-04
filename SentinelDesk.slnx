@@ -12,4 +12,6 @@
     <Project Path="src/SentinelDesk.Detection/SentinelDesk.Detection.Domain/SentinelDesk.Detection.Domain.csproj" />
     <Project Path="src/SentinelDesk.Detection/SentinelDesk.Detection.Infrastructure/SentinelDesk.Detection.Infrastructure.csproj" />
   </Folder>
+  <Folder Name="/tests/" />
+  <Project Path="tests/SentinelDesk.Detection.Tests/SentinelDesk.Detection.Tests.csproj" Id="96315951-5e93-44ce-9917-9c32f8db8996" />
 </Solution>
