@@ -1,8 +1,10 @@
 ﻿using Microsoft.Extensions.Options;
 using SentinelDesk.Detection.Api.Configuration;
+using SentinelDesk.Detection.Api.Workers;
 using SentinelDesk.Detection.Domain.Abstractions;
 using SentinelDesk.Detection.Domain.Engine;
 using SentinelDesk.Detection.Domain.Rules;
+using SentinelDesk.Detection.Infrastructure.DataGeneration;
 using SentinelDesk.Detection.Infrastructure.Persistence;
 
 namespace SentinelDesk.Detection.Api.Extensions
@@ -24,6 +26,14 @@ namespace SentinelDesk.Detection.Api.Extensions
                     "Detection:RecentEventRetention must be at least BruteForceWindow.")
                 .ValidateOnStart();
 
+            services.AddOptions<LoginSimulationOptions>()
+              .Bind(configuration.GetSection(LoginSimulationOptions.SectionName))
+              .Validate(o => o.Interval >= TimeSpan.FromSeconds(1),
+                  "LoginSimulation: Interval must be at least 1 second.")
+              .Validate(o => o.AttackScenarioProbability is >= 0 and <= 1,
+                  "LoginSimulation: AttackScenarioProbability must be between 0 and 1.")
+              .ValidateOnStart();
+
             // Stores: hold state, must be singletons.
             services.AddSingleton<IUserLoginHistoryStore, InMemoryUserLoginHistoryStore>();
             services.AddSingleton<IRecentLoginEventStore>(sp =>
@@ -41,6 +51,9 @@ namespace SentinelDesk.Detection.Api.Extensions
             });
 
             services.AddSingleton<DetectionEngine>();
+
+            services.AddSingleton<SyntheticLoginEventGenerator>();
+            services.AddHostedService<LoginSimulationWorker>();
 
             return services;
         }
