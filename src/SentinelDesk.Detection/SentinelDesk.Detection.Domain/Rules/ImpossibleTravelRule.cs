@@ -36,8 +36,8 @@ namespace SentinelDesk.Detection.Domain.Rules
             var impliedSpeedKmh = distanceKm / hoursElapsed;
 
             return impliedSpeedKmh > _maxPlausibleSpeedKmh ? DetectionResult.Suspicious(
-                $"User {currentEvent.UserId} traveled {distanceKm} km in {hoursElapsed} hours " +
-                $"(implied speed {impliedSpeedKmh:F0} kh/h) - exceeds plausible travel speed. ")
+                $"User {currentEvent.UserId} traveled {distanceKm:F0} km in {hoursElapsed:F2} hours " +
+                $"(implied speed {impliedSpeedKmh:F0} km/h) - exceeds plausible travel speed. ")
                 : DetectionResult.NotSuspicious();
 
         }
