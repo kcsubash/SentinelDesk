@@ -8,7 +8,9 @@ namespace SentinelDesk.Detection.Domain.Rules
 {
     public sealed class NewLocationRule : IDetectionRule
     {
-      
+
+        public string Name => "NewLocation";
+
         public DetectionResult Evaluate(LoginEvent currentEvent, IUserLoginHistoryStore historyStore)
         {
             if (!currentEvent.WasSuccessful)

@@ -11,6 +11,8 @@ namespace SentinelDesk.Detection.Domain.Rules
         private const double EarthRadiusKm = 6371.0;
         private readonly double _maxPlausibleSpeedKmh;
 
+        public string Name => "ImpossibleTravel";
+
         public ImpossibleTravelRule(double maxPlausibleSpeedKmh = 900.0)
         {
             _maxPlausibleSpeedKmh = maxPlausibleSpeedKmh;

@@ -79,8 +79,8 @@ namespace SentinelDesk.Detection.Api.Workers
             {
                 foreach (var finding in _engine.Process(loginEvent))
                 {
-                    _logger.LogWarning("Suspicious activity for {UserId}: {Reason}", 
-                        loginEvent.UserId, finding.Reason);
+                    _logger.LogWarning("Suspicious activity for {UserId} [{RuleName}]: {Reason}",
+                         loginEvent.UserId, finding.RuleName, finding.Reason);
                 }
             }
         

@@ -32,11 +32,11 @@ namespace SentinelDesk.Detection.Domain.Engine
             _recentEventStore = recentEventStore;
         }
 
-        public IReadOnlyList<DetectionResult> Process(LoginEvent loginEvent)
+        public IReadOnlyList<DetectionFinding> Process(LoginEvent loginEvent)
         {
             ArgumentNullException.ThrowIfNull(loginEvent);
 
-            var findings = new List<DetectionResult>();
+            var findings = new List<DetectionFinding>();
 
 
             // 1. Check, then record: history must still hold the previous successful login.
@@ -44,7 +44,7 @@ namespace SentinelDesk.Detection.Domain.Engine
             {
                 var result = rule.Evaluate(loginEvent, _historyStore);
                 if (result.IsSuspicious)
-                    findings.Add(result);
+                    findings.Add(new DetectionFinding(rule.Name, result.Reason ?? string.Empty));
             }
 
 
@@ -55,7 +55,7 @@ namespace SentinelDesk.Detection.Domain.Engine
 
             var bruteForceResult = _bruteForceRule.Evaluate(loginEvent, recentEvents);
             if (bruteForceResult.IsSuspicious)
-                findings.Add(bruteForceResult);
+                findings.Add(new DetectionFinding(_bruteForceRule.Name, bruteForceResult.Reason ?? string.Empty));
 
 
             // 3. Only successful logins become the new baseline.

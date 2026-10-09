@@ -42,6 +42,8 @@ namespace SentinelDesk.Detection.Tests.Engine
         {
             private readonly DetectionResult _result;
 
+            public string Name => "Stub";
+
             public StubRule(DetectionResult result) => _result = result;
 
             public DetectionResult Evaluate(LoginEvent loginEvent, IUserLoginHistoryStore historyStore) => _result;
@@ -49,6 +51,8 @@ namespace SentinelDesk.Detection.Tests.Engine
 
         private sealed class SpyRule : IDetectionRule
         {
+            public string Name => "Spy";
+
             public bool WasCalled { get; private set; }
             public LoginEvent? LastLoginSeen { get; private set; }
 
@@ -81,7 +85,9 @@ namespace SentinelDesk.Detection.Tests.Engine
 
             var findings = engine.Process(CreateEvent(BaseTime, wasSuccessful: true));
 
-            Assert.Equal("stub reason", Assert.Single(findings).Reason);
+            var finding = Assert.Single(findings);
+            Assert.Equal("Stub", finding.RuleName);
+            Assert.Equal("stub reason", finding.Reason);
         }
 
         [Fact]
@@ -125,7 +131,7 @@ namespace SentinelDesk.Detection.Tests.Engine
 
             var findings = engine.Process(CreateEvent(BaseTime.AddSeconds(40), wasSuccessful: false));
 
-            Assert.Single(findings);
+            Assert.Equal("BruteForce", Assert.Single(findings).RuleName);
         }
 
         [Fact]
@@ -138,7 +144,7 @@ namespace SentinelDesk.Detection.Tests.Engine
             var afterSuccess = engine.Process(CreateMoscowEvent(BaseTime.AddMinutes(2), wasSuccessful: true));
 
             Assert.Empty(afterFailure);
-            Assert.Single(afterSuccess);
+            Assert.Equal("ImpossibleTravel", Assert.Single(afterSuccess).RuleName);
         }
 
     }

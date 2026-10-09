@@ -8,5 +8,7 @@ namespace SentinelDesk.Detection.Domain.Abstractions
     public interface IDetectionRule
     {
         DetectionResult Evaluate(LoginEvent currentEvent, IUserLoginHistoryStore historyStore);
+
+        string Name { get; }
     }
 }
