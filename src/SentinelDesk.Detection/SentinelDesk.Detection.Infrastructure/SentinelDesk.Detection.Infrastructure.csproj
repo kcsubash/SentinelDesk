@@ -1,6 +1,10 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <ItemGroup>
+    <PackageReference Include="MassTransit.RabbitMQ" Version="8.5.11" />
+  </ItemGroup>
+
+  <ItemGroup>
     <ProjectReference Include="..\SentinelDesk.Detection.Domain\SentinelDesk.Detection.Domain.csproj" />
     <ProjectReference Include="..\..\SentinelDesk.Contracts\SentinelDesk.Contracts.csproj" />
   </ItemGroup>
