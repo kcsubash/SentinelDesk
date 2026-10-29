@@ -1,5 +1,6 @@
 ﻿using Microsoft.Extensions.Options;
 using SentinelDesk.Detection.Api.Configuration;
+using SentinelDesk.Detection.Domain.Abstractions;
 using SentinelDesk.Detection.Domain.Engine;
 using SentinelDesk.Detection.Domain.Entities;
 using SentinelDesk.Detection.Infrastructure.DataGeneration;
@@ -14,6 +15,7 @@ namespace SentinelDesk.Detection.Api.Workers
         private static readonly IReadOnlyList<string> UserIds 
             = SyntheticLoginEventGenerator.UserIds;
 
+        private readonly IFindingPublisher _publisher;
         private readonly SyntheticLoginEventGenerator _generator;
         private readonly DetectionEngine _engine;
         private readonly LoginSimulationOptions _options;
@@ -25,13 +27,15 @@ namespace SentinelDesk.Detection.Api.Workers
             DetectionEngine engine,
             IOptions<LoginSimulationOptions> simulationOptions,
             IOptions<DetectionOptions> detectionOptions,
-            ILogger<LoginSimulationWorker> logger)
+            ILogger<LoginSimulationWorker> logger,
+            IFindingPublisher pubisher)
         {
             _generator = generator;
             _engine = engine;
             _options = simulationOptions.Value;
             _burstSize = detectionOptions.Value.BruteForceFailureThreshold;
             _logger = logger;
+            _publisher = pubisher;
         }
 
 
@@ -53,7 +57,7 @@ namespace SentinelDesk.Detection.Api.Workers
                 {
                     try
                     {
-                        RunTick(DateTimeOffset.UtcNow);
+                       await RunTickAsync(DateTimeOffset.UtcNow, cancellationToken);
                     }
                     catch (Exception ex)
                     {
@@ -67,7 +71,7 @@ namespace SentinelDesk.Detection.Api.Workers
             }
         }
 
-        private void RunTick(DateTimeOffset now)
+        private async Task RunTickAsync(DateTimeOffset now, CancellationToken cancellationToken)
         {
             var userId = UserIds[Random.Shared.Next(UserIds.Count)];
             var (scenario, events) = GenerateScenario(userId, now);
@@ -81,6 +85,7 @@ namespace SentinelDesk.Detection.Api.Workers
                 {
                     _logger.LogWarning("Suspicious activity for {UserId} [{RuleName}]: {Reason}",
                          loginEvent.UserId, finding.RuleName, finding.Reason);
+                    await _publisher.PublishAsync(loginEvent, finding, cancellationToken);
                 }
             }
         

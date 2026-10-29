@@ -2,6 +2,8 @@
 using MassTransit.Configuration;
 using Microsoft.Extensions.Options;
 using SentinelDesk.Detection.Api.Configuration;
+using SentinelDesk.Detection.Domain.Abstractions;
+using SentinelDesk.Detection.Infrastructure.Messaging;
 using System.Security.Authentication;
 
 namespace SentinelDesk.Detection.Api.Extensions
@@ -37,7 +39,10 @@ namespace SentinelDesk.Detection.Api.Extensions
                 });
             });
 
+            services.AddSingleton<IFindingPublisher, MassTransitFindingPublisher>();
+
             return services;
+            
 
             }
 
