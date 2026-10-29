@@ -82,7 +82,7 @@ namespace SentinelDesk.Detection.Infrastructure.DataGeneration
             do
             {
                 newIndex = _random.Next(Locations.Length);
-            } while (newIndex == homeIndex);
+            } while (Locations[newIndex].Country == Locations[homeIndex].Country);
 
             return BuildEvent(userId, Locations[newIndex], timeStamp ?? DateTimeOffset.UtcNow, wasSuccessful: true);
         }

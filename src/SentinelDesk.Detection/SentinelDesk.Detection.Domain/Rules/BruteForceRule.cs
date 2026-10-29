@@ -11,6 +11,10 @@ namespace SentinelDesk.Detection.Domain.Rules
         private readonly int _failureThreshold;
         private readonly TimeSpan _window;
 
+        public string Name => "BruteForce";
+
+        public TimeSpan Window => _window;
+
         public BruteForceRule(int failureThreshold = 5, TimeSpan? window = null)
         {
             _failureThreshold = failureThreshold;
